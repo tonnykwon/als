@@ -42,8 +42,7 @@ class ALS:
 		self.Y = csr_matrix(np.random.normal(size = (right_size, hidden_size)))
 		
 		# confidence level
-		self.C = csr_matrix(R.copy()*self.alpha + 
-		np.array([1]* (left_size*right_size)).reshape((left_size, right_size)))
+		self.C = csr_matrix(R.copy()*self.alpha + np.array([1]* (left_size*right_size)).reshape((left_size, right_size)))
 		
 		# cost
 		cost = self.cost_function()
@@ -59,22 +58,22 @@ class ALS:
 				
 				self.progress(u, left_size)
 				
-			pritn('\nMovie Matrix')
-			for i, Ci in enumerate(C.T):
+			print('\nMovie Matrix')
+			for i, Ci in enumerate(self.C.T):
 				C_diag = diags(Ci.toarray()[0], shape = [left_size, left_size])
 				self.Y[i] = inv(self.X.T.dot(C_diag).dot(self.X) + eye(hidden_size)*self.reg ).dot(self.X.T).dot(C_diag).dot(R.T[i].T).T
 				
 				self.progress(i, right_size)
 
 		
-			cost = self.cost_function()
-			print('cost: '+str(cost))
+			self.cost = self.cost_function()
+			print('\ncost: '+str(self.cost))
 		
 		# save prediciton matrix
-		self.prediction = self.X.dot(Y.T)
+		self.prediction = self.X.dot(self.Y.T)
 			
 		return self.cost
 	
-	def predict(self, idx, top = 5):
-		recommendation = np.argsort(-prediction[idx])[0, :top]
+	def predict(self, idx, top = 10):
+		recommendation = (-self.prediction[idx]).toarray().argsort()[0, :top]
 		return recommendation
