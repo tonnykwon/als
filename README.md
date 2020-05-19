@@ -22,7 +22,7 @@ ratings.head()
 
 
 <p align ='center'>
-    <img src = "img/data_head.png" style="width: 60%"> <br/>
+    <img src = "../img/data_head.png" style="width: 60%"> <br/>
     <sub>Sample Ratings</sub>
 </p>
 
